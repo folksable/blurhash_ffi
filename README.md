@@ -1,12 +1,54 @@
 # blurhash_ffi
 
-Blurhash encoder and decoder using native c code with ffi bindings.
+A [Blurhash](https://blurha.sh) encoder and decoder FFI implementation for flutter, Supports Android, iOS, Linux, macOS and Windows.
+
 
 ## Getting Started
 
 This project is a starting point for a Flutter
 [FFI plugin](https://docs.flutter.dev/development/platform-integration/c-interop),
 a specialized package that includes native code directly invoked with Dart FFI.
+
+
+## Usage
+To use this plugin, add `blurhash_ffi` as a dependency in your pubspec.yaml file
+
+
+## Example
+<?code-excerpt "readme_excerpts.dart (Example)"?>
+```dart
+/// Encoding Image to BlurHash String
+/// 
+/// Steps: 
+///     1. get an Instance of [BlurHashImageInfo], there are a couple of 
+///     ways to get that which inclues information necessary for the
+///     second step of encoding.
+///     2. pass the Instance of [BlurHashImageInfo] to the [encodeBlurHash] 
+
+
+/// from Asset Images
+final BlurHashImageInfo info = await getBlurHashImageInfoFromAsset(assetName);
+
+/// for Images from any ImageProvider
+final BlurHashImageInfo info = await getImageInfoFromImageProvider(ImageProvider imageProvider);
+
+
+final Future<String> blurhash = encodeBlurHash(info);
+
+
+/// Decoding BlurHash String to Image
+///
+/// [blurHashDecodeImage] 
+/// Parameters:
+///  *`hash`      - String  - blurhash String value,
+///  *`width`     - int     - width of the output Image (it may stretch when the aspect ratio deviates from the original image)
+///  * `height`  - int     - height of the output Image(similarly to width output image may stretch or distort when the aspect ratio deviates from the original image)
+
+Future<ui.Image> blurHashDecodeImage(
+    String hash, int width, int height, int punch); 
+
+```
+check the [example](./example/) for more details
 
 ## Project structure
 

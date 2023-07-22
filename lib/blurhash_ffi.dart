@@ -25,6 +25,10 @@ bool isValidBlurHash(String blurHash) {
 
 /// Encoder A longer lived native function, which occupies the thread calling it.
 ///
+/// Parameters :
+///     `info` - The image info
+///     `componentX` - The number of components in the X direction. Must be between 1 and 9. 3 to 5 is usually a good range for this.
+///     `componentY` - The number of components in the Y direction. Must be between 1 and 9. 3 to 5 is usually a good range for this.
 Future<String> encodeBlurHash(BlurHashImageInfo info,[int componentX = 4, int componentY=3]) async {
   final SendPort helperIsolateSendPort = await _helperIsolateSendPort;
   final int requestId = _nextEncodeRequestId++;

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, deprecated_member_use
+
 import 'package:flutter/cupertino.dart';
 import 'dart:ui' as ui;
 
@@ -14,7 +16,7 @@ class UiImage extends ImageProvider<UiImage> {
       SynchronousFuture<UiImage>(this);
 
   @override
-  ImageStreamCompleter load(UiImage key, DecoderCallback decode) =>
+  ImageStreamCompleter load(UiImage key, Future<ui.Codec> Function(Uint8List, {bool allowUpscaling, int? cacheHeight, int? cacheWidth}) decode) =>
       OneFrameImageStreamCompleter(_loadAsync(key));
 
   Future<ImageInfo> _loadAsync(UiImage key) async {
@@ -30,7 +32,8 @@ class UiImage extends ImageProvider<UiImage> {
   }
 
   @override
-  int get hashCode => hashValues(image.hashCode, scale);
+  int get hashCode => Object.hash(image.hashCode, scale);
+
 
   @override
   String toString() =>

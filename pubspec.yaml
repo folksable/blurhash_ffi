@@ -1,7 +1,7 @@
 name: blurhash_ffi
 description: Blurhash encoder and decoder for flutter using native C code with ffi bindings.
 version: 0.0.1
-homepage: 
+repository: https://github.com/folksable/blurhash_ffi
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
