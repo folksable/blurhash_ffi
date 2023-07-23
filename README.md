@@ -1,124 +1,101 @@
 # blurhash_ffi
 
-A [Blurhash](https://blurha.sh) encoder and decoder FFI implementation for flutter, Supports Android, iOS, Linux, macOS and Windows.
+A [Blurhash](https://blurha.sh) compact Image placeholder encoder and decoder FFI implementation for flutter in C, Supports Android, iOS, Linux, macOS and Windows.
 
-
-## Getting Started
-
-This project is a starting point for a Flutter
-[FFI plugin](https://docs.flutter.dev/development/platform-integration/c-interop),
-a specialized package that includes native code directly invoked with Dart FFI.
+Matches the official [Blurhash](https://github.com/woltapp/blurhash) implementation in performance and quality.
 
 
 ## Usage
 To use this plugin, add `blurhash_ffi` as a dependency in your pubspec.yaml file
 
+**Encoding**
 
-## Example
 <?code-excerpt "readme_excerpts.dart (Example)"?>
 ```dart
-/// Encoding Image to BlurHash String
-/// 
-/// Steps: 
-///     1. get an Instance of [BlurHashImageInfo], there are a couple of 
-///     ways to get that which inclues information necessary for the
-///     second step of encoding.
-///     2. pass the Instance of [BlurHashImageInfo] to the [encodeBlurHash] 
+import 'package:blurhash_ffi/blurhash_ffi.dart';
 
-
-/// from Asset Images
-final BlurHashImageInfo info = await getBlurHashImageInfoFromAsset(assetName);
-
-/// for Images from any ImageProvider
-final BlurHashImageInfo info = await getImageInfoFromImageProvider(ImageProvider imageProvider);
-
-
-final Future<String> blurhash = encodeBlurHash(info);
-
-
-/// Decoding BlurHash String to Image
+/// Encoding a blurhash from an image provider
 ///
-/// [blurHashDecodeImage] 
-/// Parameters:
-///  *`hash`      - String  - blurhash String value,
-///  *`width`     - int     - width of the output Image (it may stretch when the aspect ratio deviates from the original image)
-///  * `height`  - int     - height of the output Image(similarly to width output image may stretch or distort when the aspect ratio deviates from the original image)
+/// You can use any ImageProvider you want, including NetworkImage, FileImage, MemoryImage, AssetImage, etc.
+final imageProvider = NetworkImage('https://picsum.photos/512');
+final imageProvider2 = AssetImage('assets/image.jpg');
 
-Future<ui.Image> blurHashDecodeImage(
-    String hash, int width, int height, int punch); 
+/// Signature
+/// static Future<String> encode(
+///   ImageProvider imageProvider, {
+///   int componentX = 4,
+///   int componentY = 3,
+/// })
+/// may throw `BlurhashFFIException` if encoding fails.
+final String blurHash = await BlurhashFFI.encode(imageProvider);
 
+```
+
+**Decoding**
+```dart
+import 'package:blurhash_ffi/blurhash_ffi.dart';
+import 'dart:ui' as ui;
+/// You have 3 ways to decode a blurhash 
+///
+/// 1. Using the `BlurhashFfi` widget
+/// 2. Using the `BlurhashFfiImage` ImageProvider
+/// 3. Using the `BlurhashFfi.decode` static method
+
+/// 1. Using the `BlurhashFfi` widget (same constructor as flutter_blurhash's Blurhash widget)
+class BlurHashApp extends StatelessWidget {
+  const BlurHashApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: const Text("BlurHash")),
+      body: const SizedBox.expand(
+        child: Center(
+          child: AspectRatio(
+            aspectRatio: 1.6,
+            child: BlurhashFfi(hash: "L5H2EC=PM+yV0g-mq.wG9c010J}I"),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/// 2. Using the `BlurhashFfiImage` ImageProvider
+final imageProvider = BlurhashFfiImage(hash: "L5H2EC=PM+yV0g-mq.wG9c010J}I");
+class BlurHashApp2 extends StatelessWidget {
+  const BlurHashApp2({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: const Text("BlurHash")),
+      body: const SizedBox.expand(
+        child: Center(
+          child: AspectRatio(
+            aspectRatio: 1.6,
+            child: Image(
+              image: imageProvider,
+              fit: BoxFit.cover, 
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+/// 3. Using the `BlurhashFfi.decode` static method which returns dart:ui.Image
+/// Signature 
+/// static Future<ui.Image> decode(
+///   String blurHash, {
+///   int width = 32,
+///   int height = 32,
+///   int punch = 1,
+/// })
+/// may throw `BlurhashFFIException` if decoding fails.
+final ui.Image image = await BlurhashFFI.decode("L5H2EC=PM+yV0g-mq.wG9c010J}I");
 ```
 check the [example](./example/) for more details
 
-## Project structure
-
-This template uses the following structure:
-
-* `src`: Contains the native source code, and a CmakeFile.txt file for building
-  that source code into a dynamic library.
-
-* `lib`: Contains the Dart code that defines the API of the plugin, and which
-  calls into the native code using `dart:ffi`.
-
-* platform folders (`android`, `ios`, `windows`, etc.): Contains the build files
-  for building and bundling the native code library with the platform application.
-
-## Building and bundling native code
-
-The `pubspec.yaml` specifies FFI plugins as follows:
-
-```yaml
-  plugin:
-    platforms:
-      some_platform:
-        ffiPlugin: true
-```
-
-This configuration invokes the native build for the various target platforms
-and bundles the binaries in Flutter applications using these FFI plugins.
-
-This can be combined with dartPluginClass, such as when FFI is used for the
-implementation of one platform in a federated plugin:
-
-```yaml
-  plugin:
-    implements: some_other_plugin
-    platforms:
-      some_platform:
-        dartPluginClass: SomeClass
-        ffiPlugin: true
-```
-
-A plugin can have both FFI and method channels:
-
-```yaml
-  plugin:
-    platforms:
-      some_platform:
-        pluginClass: SomeName
-        ffiPlugin: true
-```
-
-The native build systems that are invoked by FFI (and method channel) plugins are:
-
-* For Android: Gradle, which invokes the Android NDK for native builds.
-  * See the documentation in android/build.gradle.
-* For iOS and MacOS: Xcode, via CocoaPods.
-  * See the documentation in ios/blurhash_ffi.podspec.
-  * See the documentation in macos/blurhash_ffi.podspec.
-* For Linux and Windows: CMake.
-  * See the documentation in linux/CMakeLists.txt.
-  * See the documentation in windows/CMakeLists.txt.
-
-## Binding to native code
-
-To use the native code, bindings in Dart are needed.
-To avoid writing these by hand, they are generated from the header file
-(`src/blurhash_ffi.h`) by `package:ffigen`.
-Regenerate the bindings by running `flutter pub run ffigen --config ffigen.yaml`.
-## Flutter help
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
+**contributions in the form of PR's and Issues are a welcome**

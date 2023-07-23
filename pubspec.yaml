@@ -1,6 +1,8 @@
 name: blurhash_ffi
-description: Blurhash encoder and decoder for flutter using native C code with ffi bindings.
-version: 0.0.1
+description: >-
+  A compact, fast and easy to use blury image placeholder generator for Flutter
+  using native ffi bindings. 
+version: 1.0.2 
 repository: https://github.com/folksable/blurhash_ffi
 
 environment:
@@ -34,4 +36,18 @@ flutter:
       windows:
         ffiPlugin: true
 
-  
+screenshots:
+ 
+  - description: "Image 1 Selected"
+    path: screenshots/1.png
+  - description: "Image 2 Selected"
+    path: screenshots/2.png
+  - description: "Image 3 Selected"
+    path: screenshots/3.png
+  - description: "Image Unselected"
+    path: screenshots/0.png
+
+topics:
+  - blurhash
+  - ffi
+  - images
