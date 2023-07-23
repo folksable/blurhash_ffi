@@ -4,7 +4,6 @@ import 'package:blurhash_ffi/uiImage.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
-
 class BlurhashFfi extends StatefulWidget {
   const BlurhashFfi({
     required this.hash,
@@ -113,7 +112,11 @@ class _BlurhashFfiState extends State<BlurhashFfi> {
         fit: StackFit.expand,
         alignment: Alignment.center,
         children: [
-          buildBlurHashBackground(),
+          BlurhashBackground(
+              image: _image,
+              color: widget.color,
+              fit: widget.imageFit,
+              errorBuilder: widget.errorBuilder),
           if (widget.image != null) prepareDisplayedImage(widget.image!),
         ],
       );
@@ -145,14 +148,39 @@ class _BlurhashFfiState extends State<BlurhashFfi> {
           }
         },
       );
+}
 
-  /// Decode the blurhash then display the resulting Image
-  Widget buildBlurHashBackground() => FutureBuilder<ui.Image>(
+class BlurhashBackground extends StatelessWidget {
+  const BlurhashBackground({
+    super.key,
+    required Future<ui.Image> image,
+    this.color = Colors.blueGrey,
+    this.fit = BoxFit.cover,
+    this.errorBuilder,
+  }) : _image = image;
+
+  final Future<ui.Image> _image;
+  final ImageErrorWidgetBuilder? errorBuilder;
+  final BoxFit? fit;
+  final Color? color;
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<ui.Image>(
         future: _image,
-        builder: (ctx, snap) => snap.hasData
-            ? Image(image: UiImage(snap.data!), fit: widget.imageFit)
-            : Container(color: widget.color),
-      );
+        builder: (ctx, snap) {
+          if (snap.hasError && errorBuilder != null) {
+            return errorBuilder!(ctx, snap.error!, StackTrace.current);
+          }
+          if (snap.hasData) {
+            return Image(
+              image: UiImage(snap.data!),
+              fit: fit,
+              errorBuilder: errorBuilder,
+            );
+          }
+          return Container(color: color);
+        });
+  }
 }
 
 // Inner display details & controls
