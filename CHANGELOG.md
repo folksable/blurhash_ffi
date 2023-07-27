@@ -28,3 +28,6 @@
 ## 1.0.4
   * added a method to free the isolate and it's memory using `BlurhashFFi.free()`.
   * improved readme.md and pubspec.yaml
+
+## 1.0.5
+  * smaller image size for pub.dev
