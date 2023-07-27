@@ -5,6 +5,9 @@ A [Blurhash](https://blurha.sh) compact Image placeholder encoder and decoder FF
 Matches the official [Blurhash](https://github.com/woltapp/blurhash) implementation in performance and quality.
 
 
+![blurhash_ffi](./screenshots/blurhash.png)
+
+
 ## Usage
 To use this plugin, add `blurhash_ffi` as a dependency in your pubspec.yaml file
 
@@ -95,6 +98,14 @@ class BlurHashApp2 extends StatelessWidget {
 /// })
 /// may throw `BlurhashFFIException` if decoding fails.
 final ui.Image image = await BlurhashFFI.decode("L5H2EC=PM+yV0g-mq.wG9c010J}I");
+```
+
+**Release Isolate and it's memory**
+```dart
+import 'package:blurhash_ffi/blurhash_ffi.dart';
+
+BlurhashFFi.free();
+
 ```
 check the [example](./example/) for more details
 

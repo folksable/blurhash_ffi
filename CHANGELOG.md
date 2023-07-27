@@ -17,3 +17,14 @@
 
 ## 1.0.2
  * short description for pub.dev
+
+## 1.0.3
+  ### Issues Fixed/Improvements from [flutter_blurhash](https://github.com/fluttercommunity/flutter_blurhash/)
+  * [Universal Blurhash support](https://github.com/fluttercommunity/flutter_blurhash/issues/51) (all types of ImageProviders are supported) 
+  * added errorBuilder support incase of failure in decoding blurhash [#48](https://github.com/fluttercommunity/flutter_blurhash/issues/48)
+  * Decoding happens in a separate isolate to avoid UI jank [#33](https://github.com/fluttercommunity/flutter_blurhash/issues/33)
+  * encoding support [#50](https://github.com/fluttercommunity/flutter_blurhash/issues/50)
+
+## 1.0.4
+  * added a method to free the isolate and it's memory using `BlurhashFFi.free()`.
+  * improved readme.md and pubspec.yaml

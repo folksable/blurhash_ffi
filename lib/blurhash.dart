@@ -62,11 +62,13 @@ class BlurhashFFI {
 
   BlurhashFFI._internal();
 
-  void free() {
+  void _free() {
     for (var isolate in _helperIsolates) {
       isolate.kill();
     }
   }
+
+  static void free() => _instance._free();
 
   static bool isValidBlurHash(String blurHash) =>
       _instance._isValidBlurHash(blurHash);
