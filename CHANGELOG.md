@@ -31,3 +31,6 @@
 
 ## 1.0.5
   * smaller image size for pub.dev
+
+## 1.0.6
+  * pubspec.yaml and readme.md changes

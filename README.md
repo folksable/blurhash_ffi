@@ -5,7 +5,7 @@ A [Blurhash](https://blurha.sh) compact Image placeholder encoder and decoder FF
 Matches the official [Blurhash](https://github.com/woltapp/blurhash) implementation in performance and quality.
 
 
-![blurhash_ffi](./screenshots/blurhash.png)
+![blurhash_ffi](https://firebasestorage.googleapis.com/v0/b/folksable-d4dc8.appspot.com/o/blurhash_ffi.png?alt=media&token=e6c7e81b-1798-403b-b055-68a1f767d21f)
 
 
 ## Usage
