@@ -65,7 +65,7 @@ class BlurHashApp extends StatelessWidget {
 }
 
 /// 2. Using the `BlurhashFfiImage` ImageProvider
-final imageProvider = BlurhashFfiImage(hash: "L5H2EC=PM+yV0g-mq.wG9c010J}I");
+final imageProvider = BlurhashFfiImage("L5H2EC=PM+yV0g-mq.wG9c010J}I");
 class BlurHashApp2 extends StatelessWidget {
   const BlurHashApp2({Key? key}) : super(key: key);
 
