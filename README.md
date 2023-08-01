@@ -101,6 +101,8 @@ final ui.Image image = await BlurhashFFI.decode("L5H2EC=PM+yV0g-mq.wG9c010J}I");
 ```
 
 **Release Isolate and it's memory**
+
+do this only when you are done with encoding/decoding blurhashes
 ```dart
 import 'package:blurhash_ffi/blurhash_ffi.dart';
 

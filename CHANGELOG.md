@@ -34,3 +34,7 @@
 
 ## 1.0.6
   * pubspec.yaml and readme.md changes
+
+## 1.1.0
+  * added a `BlurhashTheImage` widget which takes an `ImageProvider` and gives out `ImageProvider` of the resulting blurry Image in one step.
+  * also made it clear that `BlurhashFFI.free()` should be only run when you are sure there are no more blurhashes to be decoded/encoded in your app.
