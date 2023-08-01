@@ -11,6 +11,34 @@ Matches the official [Blurhash](https://github.com/woltapp/blurhash) implementat
 ## Usage
 To use this plugin, add `blurhash_ffi` as a dependency in your pubspec.yaml file
 
+**One Step (both Encoding & Decoding) Usage**
+```dart
+import 'package:blurhash_ffi/blurhash_ffi.dart';
+
+/// Encoding and Decoding all in One Step
+///
+/// `ImageProvider` in    -> Send your Image to be encoded.
+/// `ImageProvider` out   -> Get your blurry image version.
+
+class BlurhashMyImage extends StatelessWidget {
+  final String imageUrl;
+  const BlurhashMyImage({required this.imageUrl, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Image(
+      image: BlurhashTheImage(
+        NetworkImage(imageUrl),  // you can use any image provider of your choice.
+          decodingHeight: 1920, decodingWidth: 1080),
+      alignment: Alignment.center,
+      fit: BoxFit.cover
+    );
+  }
+}
+
+
+```
+
 **Encoding**
 
 <?code-excerpt "readme_excerpts.dart (Example)"?>
