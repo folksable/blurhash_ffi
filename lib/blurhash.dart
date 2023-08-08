@@ -257,89 +257,89 @@ class BlurhashFFI {
 
   late final Future<SendPort> _helperIsolateSendPort =
       _helperIsolateSendPortFunc();
+
   /// The SendPort belonging to the helper isolate.
   Future<SendPort> _helperIsolateSendPortFunc() async {
-        // The helper isolate is going to send us back a SendPort, which we want to
-        // wait for.
-        final Completer<SendPort> completer = Completer<SendPort>();
+    // The helper isolate is going to send us back a SendPort, which we want to
+    // wait for.
+    final Completer<SendPort> completer = Completer<SendPort>();
 
-        // Receive port on the main isolate to receive messages from the helper.
-        // We receive two types of messages:
-        // 1. A port to send messages on.
-        // 2. Responses to requests we sent.
-        void onData(dynamic data) {
-          if (data is SendPort) {
-            // The helper isolate sent us the port on which we can sent it requests.
-            completer.complete(data);
-            return;
-          }
-          if (data is _EncodeResponse) {
-            // The helper isolate sent us a response to a request we sent.
-            final Completer<String> completer = _encodeRequests[data.id]!;
-            _encodeRequests.remove(data.id);
-            completer.complete(data.result);
-            return;
-          } else if (data is _DecodeResponse) {
-            // The helper isolate sent us a response to a request we sent.
-            final Completer<Uint8List> completer = _decodeRequests[data.id]!;
-            _decodeRequests.remove(data.id);
-            completer.complete(data.result);
-            return;
-          } else if (data is _DecodeToArrayResponse) {
-            // The helper isolate sent us a response to a request we sent.
-            final Completer<int> completer = _decodeToArrayRequests[data.id]!;
-            _decodeToArrayRequests.remove(data.id);
-            completer.complete(data.result);
-            return;
-          }
-          throw UnsupportedError(
-              'Unsupported message type: ${data.runtimeType}');
-        }
-
-        final ReceivePort receivePort = ReceivePort()..listen(onData);
-        final ReceivePort errorPort = ReceivePort()
-          ..listen((message) {
-            final isolateDebugName =
-                'blurhash_ffi#native#${_helperIsolates.length}';
-            if (message is BlurhashFFIException) {
-              switch (message.level) {
-                case Level.SEVERE:
-                  _log.severe('Error $isolateDebugName: ${message.message}',
-                      message.error, message.stackTrace);
-                  break;
-                case Level.INFO:
-                  _log.info('Error $isolateDebugName: ${message.message}',
-                      message.error, message.stackTrace);
-                  break;
-                case Level.WARNING:
-                  _log.warning('Error $isolateDebugName: ${message.message}',
-                      message.error, message.stackTrace);
-                  break;
-                default:
-                  _log.shout(
-                      'Error ${message.level} $isolateDebugName: ${message.message}',
-                      message.error,
-                      message.stackTrace);
-              }
-            } else {
-              _log.shout('Error $isolateDebugName: $message');
-            }
-          });
-        // Start the helper isolate.
-        final isolate = await Isolate.spawn<SendPort>(
-          isolateEntryPoint,
-          receivePort.sendPort,
-          errorsAreFatal: false,
-          onError: errorPort.sendPort,
-          debugName: 'blurhash_ffi#native#${_helperIsolates.length}}',
-        );
-
-        _helperIsolates.add(isolate);
-
-        // Wait until the helper isolate has sent us back the SendPort on which we
-        // can start sending requests.
-        return completer.future;
+    // Receive port on the main isolate to receive messages from the helper.
+    // We receive two types of messages:
+    // 1. A port to send messages on.
+    // 2. Responses to requests we sent.
+    void onData(dynamic data) {
+      if (data is SendPort) {
+        // The helper isolate sent us the port on which we can sent it requests.
+        completer.complete(data);
+        return;
       }
+      if (data is _EncodeResponse) {
+        // The helper isolate sent us a response to a request we sent.
+        final Completer<String> completer = _encodeRequests[data.id]!;
+        _encodeRequests.remove(data.id);
+        completer.complete(data.result);
+        return;
+      } else if (data is _DecodeResponse) {
+        // The helper isolate sent us a response to a request we sent.
+        final Completer<Uint8List> completer = _decodeRequests[data.id]!;
+        _decodeRequests.remove(data.id);
+        completer.complete(data.result);
+        return;
+      } else if (data is _DecodeToArrayResponse) {
+        // The helper isolate sent us a response to a request we sent.
+        final Completer<int> completer = _decodeToArrayRequests[data.id]!;
+        _decodeToArrayRequests.remove(data.id);
+        completer.complete(data.result);
+        return;
+      }
+      throw UnsupportedError('Unsupported message type: ${data.runtimeType}');
+    }
+
+    final ReceivePort receivePort = ReceivePort()..listen(onData);
+    final ReceivePort errorPort = ReceivePort()
+      ..listen((message) {
+        final isolateDebugName =
+            'blurhash_ffi#native#${_helperIsolates.length}';
+        if (message is BlurhashFFIException) {
+          switch (message.level) {
+            case Level.SEVERE:
+              _log.severe('Error $isolateDebugName: ${message.message}',
+                  message.error, message.stackTrace);
+              break;
+            case Level.INFO:
+              _log.info('Error $isolateDebugName: ${message.message}',
+                  message.error, message.stackTrace);
+              break;
+            case Level.WARNING:
+              _log.warning('Error $isolateDebugName: ${message.message}',
+                  message.error, message.stackTrace);
+              break;
+            default:
+              _log.shout(
+                  'Error ${message.level} $isolateDebugName: ${message.message}',
+                  message.error,
+                  message.stackTrace);
+          }
+        } else {
+          _log.shout('Error $isolateDebugName: $message');
+        }
+      });
+    // Start the helper isolate.
+    final isolate = await Isolate.spawn<SendPort>(
+      isolateEntryPoint,
+      receivePort.sendPort,
+      errorsAreFatal: false,
+      onError: errorPort.sendPort,
+      debugName: 'blurhash_ffi#native#${_helperIsolates.length}}',
+    );
+
+    _helperIsolates.add(isolate);
+
+    // Wait until the helper isolate has sent us back the SendPort on which we
+    // can start sending requests.
+    return completer.future;
+  }
 
   void isolateEntryPoint(SendPort sendPort) async {
     void onSend(dynamic data) {

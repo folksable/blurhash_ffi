@@ -13,6 +13,8 @@
 
 #if _WIN32
 #define FFI_PLUGIN_EXPORT __declspec(dllexport)
+#elif __APPLE__
+#define FFI_PLUGIN_EXPORT __attribute__((visibility("default"))) __attribute__((used))
 #else
 #define FFI_PLUGIN_EXPORT
 #endif
@@ -79,12 +81,3 @@ bool isValidBlurhash(const char * blurhash);
 */
 FFI_PLUGIN_EXPORT
 void freePixelArray(uint8_t * pixelArray);
-
-/*
-	freeBlurhash : Frees the blurhash string
-	Parameters :
-		blurhash : Blurhash string pointer which will be freed.
-	Returns : void (None)
-*/
-FFI_PLUGIN_EXPORT
-void freeString(const char * blurhash);
