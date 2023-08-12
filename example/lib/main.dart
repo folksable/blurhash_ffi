@@ -1,5 +1,7 @@
-import 'package:blurhash_ffi/blurhash_ffi.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+
+import 'package:blurhash_ffi/blurhash_ffi.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,6 +15,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  Future<String>? blurHashResult;
   int selectedImage = -1;
 
   @override
@@ -42,6 +45,9 @@ class _MyAppState extends State<MyApp> {
                     return MaterialButton(
                       padding: EdgeInsets.zero,
                       onPressed: () async {
+                        blurHashResult = BlurhashFFI.encode(
+                          AssetImage(assetName),
+                        );
                         setState(() {
                           selectedImage = e;
                         });
@@ -53,33 +59,45 @@ class _MyAppState extends State<MyApp> {
                     );
                   }).toList(),
                 ),
-                if (selectedImage != -1)
-                  Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                        height: 120,
-                        width: 120,
-                        child: Image(
-                          image: BlurhashTheImage(
-                            AssetImage(selectedImage == 2
-                                ? 'assets/images/$selectedImage.png'
-                                : 'assets/images/$selectedImage.jpg'),
-                            decodingWidth: 120,
-                            decodingHeight: 120,
-                          ),
-                          loadingBuilder: (context, child, loadingProgress) =>
-                              loadingProgress == null
-                                  ? child
-                                  : const Center(
-                                      child: CircularProgressIndicator(
-                                        color: Color(0xFFF1D4D4),
-                                      ),
-                                    ),
-                          frameBuilder:
-                              (context, child, frame, wasSynchronouslyLoaded) =>
-                                  child,
-                        )),
-                  )
+                if (blurHashResult != null)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FutureBuilder(
+                      future: blurHashResult,
+                      builder: (context, snapshot) => snapshot.hasData
+                          ? Text('mbh: ${snapshot.data}')
+                          : const CircularProgressIndicator(),
+                    ),
+                  ),
+                // if (blurHashResult != null)
+                //   Align(
+                //     alignment: Alignment.center,
+                //     child: SizedBox(
+                //       height: 120,
+                //       width: 120,
+                //       child: FutureBuilder(
+                //           future: blurHashResult,
+                //           builder: (context, snapshot) {
+                //             if (snapshot.hasData) {
+                //               return BlurhashFfi(
+                //                 hash: snapshot.data!,
+                //                 decodingWidth: 120,
+                //                 decodingHeight: 120,
+                //                 imageFit: BoxFit.cover,
+                //                 color: Colors.grey,
+                //                 onReady: () => debugPrint('Blurhash ready'),
+                //                 onDisplayed: () => debugPrint('Blurhash displayed'),
+                //                 errorBuilder: (context, error, stackTrace) => Container(
+                //                   color: Colors.red,
+                //                   child: const Center(child: Text('Error', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)))),
+                //               );
+                //             }
+                //             return const Center(
+                //               child: CircularProgressIndicator(),
+                //             );
+                //           }),
+                //     ),
+                //   )
               ],
             ),
           ),
@@ -109,22 +127,6 @@ class ImageSelect extends StatelessWidget {
           height: 100,
         ),
       ),
-    );
-  }
-}
-
-class BlurhashMyImage extends StatelessWidget {
-  final String imageUrl;
-  const BlurhashMyImage({required this.imageUrl, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Image(
-      image: BlurhashTheImage(
-        NetworkImage(imageUrl), // you can use any image provider of your choice.
-          decodingHeight: 1920, decodingWidth: 1080),
-      alignment: Alignment.center,
-      fit: BoxFit.cover,
     );
   }
 }
