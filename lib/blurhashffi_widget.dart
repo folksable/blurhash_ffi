@@ -178,7 +178,10 @@ class BlurhashBackground extends StatelessWidget {
               errorBuilder: errorBuilder,
             );
           }
-          return AnimatedContainer(color: color, duration: const Duration(milliseconds: 100),);
+          return AnimatedContainer(
+            color: color,
+            duration: const Duration(milliseconds: 100),
+          );
         });
   }
 }
