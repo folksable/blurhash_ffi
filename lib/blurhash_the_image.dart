@@ -43,7 +43,7 @@ class BlurhashTheImage extends ImageProvider<BlurhashTheImage> {
   bool operator ==(Object other) => other.runtimeType != runtimeType
       ? false
       : other is BlurhashTheImage &&
-          other.inputImage == inputImage&&
+          other.inputImage == inputImage &&
           other.scale == scale;
 
   @override

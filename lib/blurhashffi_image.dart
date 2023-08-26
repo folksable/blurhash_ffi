@@ -7,9 +7,7 @@ class BlurhashFfiImage extends ImageProvider<BlurhashFfiImage> {
   ///
   /// The arguments must not be null.
   const BlurhashFfiImage(this.blurHash,
-      {this.decodingWidth = 32,
-      this.decodingHeight = 32,
-      this.scale = 1.0});
+      {this.decodingWidth = 32, this.decodingHeight = 32, this.scale = 1.0});
 
   /// The bytes to decode into an image.
   final String blurHash;
@@ -34,7 +32,8 @@ class BlurhashFfiImage extends ImageProvider<BlurhashFfiImage> {
   Future<ImageInfo> _loadAsync(BlurhashFfiImage key) async {
     assert(key == this);
 
-    final image = await BlurhashFFI.decode(blurHash, width: decodingWidth, height: decodingHeight);
+    final image = await BlurhashFFI.decode(blurHash,
+        width: decodingWidth, height: decodingHeight);
     return ImageInfo(image: image, scale: key.scale);
   }
 

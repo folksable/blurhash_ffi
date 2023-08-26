@@ -69,35 +69,43 @@ class _MyAppState extends State<MyApp> {
                           : const CircularProgressIndicator(),
                     ),
                   ),
-                // if (blurHashResult != null)
-                //   Align(
-                //     alignment: Alignment.center,
-                //     child: SizedBox(
-                //       height: 120,
-                //       width: 120,
-                //       child: FutureBuilder(
-                //           future: blurHashResult,
-                //           builder: (context, snapshot) {
-                //             if (snapshot.hasData) {
-                //               return BlurhashFfi(
-                //                 hash: snapshot.data!,
-                //                 decodingWidth: 120,
-                //                 decodingHeight: 120,
-                //                 imageFit: BoxFit.cover,
-                //                 color: Colors.grey,
-                //                 onReady: () => debugPrint('Blurhash ready'),
-                //                 onDisplayed: () => debugPrint('Blurhash displayed'),
-                //                 errorBuilder: (context, error, stackTrace) => Container(
-                //                   color: Colors.red,
-                //                   child: const Center(child: Text('Error', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)))),
-                //               );
-                //             }
-                //             return const Center(
-                //               child: CircularProgressIndicator(),
-                //             );
-                //           }),
-                //     ),
-                //   )
+                if (blurHashResult != null)
+                  Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      height: 120,
+                      width: 120,
+                      child: FutureBuilder(
+                          future: blurHashResult,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return BlurhashFfi(
+                                hash: snapshot.data!,
+                                decodingWidth: 120,
+                                decodingHeight: 120,
+                                imageFit: BoxFit.cover,
+                                color: Colors.grey,
+                                onReady: () => debugPrint('Blurhash ready'),
+                                onDisplayed: () =>
+                                    debugPrint('Blurhash displayed'),
+                                errorBuilder: (context, error, stackTrace) =>
+                                    Container(
+                                        color: Colors.red,
+                                        child: const Center(
+                                            child: Text('Error',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold)))),
+                              );
+                            }
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }),
+                    ),
+                  )
               ],
             ),
           ),

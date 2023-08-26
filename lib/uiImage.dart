@@ -15,7 +15,11 @@ class UiImage extends ImageProvider<UiImage> {
       SynchronousFuture<UiImage>(this);
 
   @override
-  ImageStreamCompleter load(UiImage key, Future<ui.Codec> Function(Uint8List, {bool allowUpscaling, int? cacheHeight, int? cacheWidth}) decode) =>
+  ImageStreamCompleter load(
+          UiImage key,
+          Future<ui.Codec> Function(Uint8List,
+                  {bool allowUpscaling, int? cacheHeight, int? cacheWidth})
+              decode) =>
       OneFrameImageStreamCompleter(_loadAsync(key));
 
   Future<ImageInfo> _loadAsync(UiImage key) async {
@@ -32,7 +36,6 @@ class UiImage extends ImageProvider<UiImage> {
 
   @override
   int get hashCode => Object.hash(image.hashCode, scale);
-
 
   @override
   String toString() =>
