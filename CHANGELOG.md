@@ -41,3 +41,7 @@
 
 ## 1.1.1
   * modify readme.md to explain how to use `BlurhashTheImage` widget
+
+## 1.1.2
+  * replace colored container while loading blurhash with `AnimatedContainer`
+  * format code
