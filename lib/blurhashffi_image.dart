@@ -26,7 +26,7 @@ class BlurhashFfiImage extends ImageProvider<BlurhashFfiImage> {
       SynchronousFuture<BlurhashFfiImage>(this);
 
   @override
-  ImageStreamCompleter load(BlurhashFfiImage key, decode) =>
+  ImageStreamCompleter loadImage(BlurhashFfiImage key, decode) =>
       OneFrameImageStreamCompleter(_loadAsync(key));
 
   Future<ImageInfo> _loadAsync(BlurhashFfiImage key) async {

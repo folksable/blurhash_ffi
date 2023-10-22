@@ -45,3 +45,9 @@
 ## 1.1.2
   * replace colored container while loading blurhash with `AnimatedContainer`
   * format code
+
+## 1.1.3
+  * format code
+
+## 1.2.0
+  * remove depricated code from ImageProvider implementations

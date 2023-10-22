@@ -27,7 +27,7 @@ class BlurhashTheImage extends ImageProvider<BlurhashTheImage> {
       SynchronousFuture<BlurhashTheImage>(this);
 
   @override
-  ImageStreamCompleter load(BlurhashTheImage key, decode) =>
+  ImageStreamCompleter loadImage(BlurhashTheImage key, decode) =>
       OneFrameImageStreamCompleter(_loadAsync(key));
 
   Future<ImageInfo> _loadAsync(BlurhashTheImage key) async {
