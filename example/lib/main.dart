@@ -1,7 +1,9 @@
+import 'package:blurhash_ffi_example/config.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 import 'package:blurhash_ffi/blurhash_ffi.dart';
+import 'package:unsplash_client/unsplash_client.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,102 +17,91 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  Future<String>? blurHashResult;
-  int selectedImage = -1;
+  bool hasError = false;
+  String errorMessage = '';
+
+  static const AppCredentials credential = AppCredentials(
+      accessKey: Config.unsplashAccessKey, secretKey: Config.unsplashSecretKey);
+
+  final client = UnsplashClient(
+    settings: const ClientSettings(credentials: credential),
+  );
+
+  final List<Photo> photos = [];
+
+  void loadProtraits() async {
+    client.search
+        .photos('fashion',
+            page: 1,
+            perPage: 30,
+            orientation: PhotoOrientation.portrait,
+            orderBy: PhotoOrder.relevant,
+            contentFilter: ContentFilter.high)
+        .goAndGet()
+        .then((value) async {
+      setState(() {
+        photos.addAll(value.results);
+      });
+    }).catchError((e) {
+      debugPrint('error while loading images: $e');
+      setState(() {
+        hasError = true;
+        errorMessage = e.toString();
+      });
+    });
+  }
 
   @override
   void initState() {
+    setStatusBarColor();
+    PaintingBinding.instance.imageCache.maximumSizeBytes = cacheSize200M;
+    loadProtraits();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Blurhash FFI Example'),
-        ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [1, 2, 3].map<Widget>((e) {
-                    var assetName = e == 2
-                        ? 'assets/images/$e.png'
-                        : 'assets/images/$e.jpg';
-                    return MaterialButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () async {
-                        blurHashResult = BlurhashFFI.encode(
-                          AssetImage(assetName),
-                        );
-                        setState(() {
-                          selectedImage = e;
-                        });
-                      },
-                      child: ImageSelect(
-                        imageProvider: AssetImage(assetName),
-                        isSelected: selectedImage == e,
-                      ),
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(body: Builder(builder: (context) {
+        if (hasError) {
+          return Center(
+            child: Text(errorMessage),
+          );
+        }
+        if (photos.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        return PageView.builder(
+            itemCount: photos.length,
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) => CachedNetworkImage(
+                  imageUrl: photos[index].urls.raw.toString(),
+                  placeholder: (context, url) {
+                    if (photos[index].blurHash == null) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    return BlurhashFfi(
+                      hash: photos[index].blurHash!,
+                      imageFit: BoxFit.cover,
                     );
-                  }).toList(),
-                ),
-                if (blurHashResult != null)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: FutureBuilder(
-                      future: blurHashResult,
-                      builder: (context, snapshot) => snapshot.hasData
-                          ? Text('mbh: ${snapshot.data}')
-                          : const CircularProgressIndicator(),
-                    ),
-                  ),
-                if (blurHashResult != null)
-                  Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      height: 120,
-                      width: 120,
-                      child: FutureBuilder(
-                          future: blurHashResult,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return BlurhashFfi(
-                                hash: snapshot.data!,
-                                decodingWidth: 120,
-                                decodingHeight: 120,
-                                imageFit: BoxFit.cover,
-                                color: Colors.grey,
-                                onReady: () => debugPrint('Blurhash ready'),
-                                onDisplayed: () =>
-                                    debugPrint('Blurhash displayed'),
-                                errorBuilder: (context, error, stackTrace) =>
-                                    Container(
-                                        color: Colors.red,
-                                        child: const Center(
-                                            child: Text('Error',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.bold)))),
-                              );
-                            }
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }),
-                    ),
-                  )
-              ],
-            ),
-          ),
-        ),
-      ),
+                  },
+                  errorWidget: (context, url, error) =>
+                      const Center(child: Icon(Icons.error)),
+                  fit: BoxFit.cover,
+                  height: double.infinity,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  fadeInDuration: const Duration(milliseconds: 600),
+                  fadeInCurve: Curves.easeIn,
+                  fadeOutDuration: const Duration(milliseconds: 600),
+                  fadeOutCurve: Curves.easeOut,
+                ));
+      })),
     );
   }
 }
@@ -125,14 +116,14 @@ class ImageSelect extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 240),
         decoration: BoxDecoration(
-          border: isSelected ? Border.all(color: Colors.blue, width: 2) : null,
+          border: isSelected ? Border.all(color: Colors.black, width: 4) : null,
         ),
         child: Image(
           image: imageProvider,
-          width: 100,
-          height: 100,
+          height: 400,
         ),
       ),
     );

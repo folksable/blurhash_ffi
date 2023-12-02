@@ -4,6 +4,8 @@ description: >-
   using native ffi bindings. 
 version: 1.2.0
 repository: https://github.com/folksable/blurhash_ffi
+issue_tracker: https://github.com/folksable/blurhash_ffi/issues
+funding: 
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
