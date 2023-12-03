@@ -21,13 +21,13 @@ static inline float signPow(float value, float exp) {
 }
 
 
-static float *multiplyBasisFunction(int xComponent, int yComponent, int width, int height, uint8_t *rgb, size_t bytesPerRow);
+static float *multiplyBasisFunction(int xComponent, int yComponent, int width, int height, uint8_t *rgb, int64_t bytesPerRow);
 static char *encode_int(int value, int length, char *destination);
 
 static int encodeDC(float r, float g, float b);
 static int encodeAC(float r, float g, float b, float maximumValue);
 
-const char *blurHashForPixels(int xComponents, int yComponents, int width, int height, uint8_t *rgb, size_t bytesPerRow) {
+const char *blurHashForPixels(int xComponents, int yComponents, int width, int height, uint8_t *rgb, int64_t bytesPerRow) {
 	static char buffer[2 + 4 + (9 * 9 - 1) * 2 + 1];
 
 	if(xComponents < 1 || xComponents > 9) return NULL;
@@ -82,7 +82,7 @@ const char *blurHashForPixels(int xComponents, int yComponents, int width, int h
 	return buffer;
 }
 
-static float *multiplyBasisFunction(int xComponent, int yComponent, int width, int height, uint8_t *rgb, size_t bytesPerRow) {
+static float *multiplyBasisFunction(int xComponent, int yComponent, int width, int height, uint8_t *rgb, int64_t bytesPerRow) {
 	float r = 0, g = 0, b = 0;
 	float normalisation = (xComponent == 0 && yComponent == 0) ? 1 : 2;
 
