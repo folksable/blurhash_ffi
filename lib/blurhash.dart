@@ -192,8 +192,10 @@ class BlurhashFFI {
         rgbBytes[j + 1] = list[i + 1];
         rgbBytes[j + 2] = list[i + 2];
       }
-      completer.complete(BlurHashImageInfo(imageInfo.image.height,
-          imageInfo.image.width, imageInfo.image.width * 3, rgbBytes));
+      if(!completer.isCompleted) {
+        completer.complete(BlurHashImageInfo(imageInfo.image.height,
+            imageInfo.image.width, imageInfo.image.width * 3, rgbBytes));
+      }
     }, onError: (dynamic exception, StackTrace? stackTrace) {
       completer.completeError(exception, stackTrace);
     });
