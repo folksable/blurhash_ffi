@@ -192,7 +192,7 @@ class BlurhashFFI {
         rgbBytes[j + 1] = list[i + 1];
         rgbBytes[j + 2] = list[i + 2];
       }
-      if(!completer.isCompleted) {
+      if (!completer.isCompleted) {
         completer.complete(BlurHashImageInfo(imageInfo.image.height,
             imageInfo.image.width, imageInfo.image.width * 3, rgbBytes));
       }

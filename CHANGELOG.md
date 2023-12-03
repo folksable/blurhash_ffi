@@ -51,3 +51,7 @@
 
 ## 1.2.0
   * remove depricated code from ImageProvider implementations
+
+## 1.2.1
+  * fixed [#11](https://github.com/folksable/blurhash_ffi/issues/11)
+  * format code

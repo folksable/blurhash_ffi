@@ -15,8 +15,7 @@ class UiImage extends ImageProvider<UiImage> {
       SynchronousFuture<UiImage>(this);
 
   @override
-  ImageStreamCompleter loadImage(
-          UiImage key, decode) =>
+  ImageStreamCompleter loadImage(UiImage key, decode) =>
       OneFrameImageStreamCompleter(_loadAsync(key));
 
   Future<ImageInfo> _loadAsync(UiImage key) async {
