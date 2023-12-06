@@ -57,7 +57,7 @@ class BlurhashFfiBindings {
   late final _blurHashForPixelsPtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<ffi.Char> Function(ffi.Int, ffi.Int, ffi.Int, ffi.Int,
-              ffi.Pointer<ffi.Uint8>, ffi.Int)>>('blurHashForPixels');
+              ffi.Pointer<ffi.Uint8>, ffi.Int64)>>('blurHashForPixels');
   late final _blurHashForPixels = _blurHashForPixelsPtr.asFunction<
       ffi.Pointer<ffi.Char> Function(
           int, int, int, int, ffi.Pointer<ffi.Uint8>, int)>();
