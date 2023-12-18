@@ -79,6 +79,8 @@ const char *blurHashForPixels(int xComponents, int yComponents, int width, int h
 
 	*ptr = 0;
 
+	free(factors);
+
 	return buffer;
 }
 
@@ -262,6 +264,8 @@ int decodeToArray(const char * blurhash, int width, int height, int punch, int n
 
 		}
 	}
+
+	free(colors);
 
 	return 0;
 }
