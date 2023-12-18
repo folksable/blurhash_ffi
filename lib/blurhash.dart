@@ -366,11 +366,18 @@ class BlurhashFFI {
           final Pointer<Uint8> result = _bindings.decode(data.blurHashPointer,
               data.width, data.height, data.punch, data.channels);
           data.free();
-          final Uint8List resultImage =
-              result.asTypedList(data.width * data.height * data.channels);
+          final Uint8List resultImage = result.asTypedList(
+            data.width * data.height * data.channels,
+            // preffer way but works only from dart 3.1.0, and requre to change generated bindings
+            // finalizer: _bindings.freePixelArrayPtr.cast(),
+          );
+          final _DecodeResponse response = _DecodeResponse(
+            data.id,
+            // copy image data to prevent 'use after free' error
+            Uint8List.fromList(resultImage),
+          );
+          // free c side memory
           _bindings.freePixelArray(result);
-          final _DecodeResponse response =
-              _DecodeResponse(data.id, resultImage);
           sendPort.send(response);
           return;
         } else if (data is _DecodeToArrayRequest) {
