@@ -216,7 +216,10 @@ int decodeToArray(const char * blurhash, int width, int height, int punch, int n
 	for(iter = 0; iter < colors_size; iter ++) {
 		if (iter == 0) {
 			int value = decodeToInt(blurhash, 2, 6);
-			if (value == -1) return -1;
+			if (value == -1) {
+				free(colors);
+				return -1;
+			}
 			decodeDC(value, &r, &g, &b);
 			colors[iter * 3 + 0] = r;
 			colors[iter * 3 + 1] = g;
@@ -224,14 +227,16 @@ int decodeToArray(const char * blurhash, int width, int height, int punch, int n
 
 		} else {
 			int value = decodeToInt(blurhash, 4 + iter * 2, 6 + iter * 2);
-			if (value == -1) return -1;
+			if (value == -1) {
+				free(colors);
+				return -1;
+			}
 			decodeAC(value, maxValue * punch, &r, &g, &b);
 			colors[iter * 3 + 0] = r;
 			colors[iter * 3 + 1] = g;
 			colors[iter * 3 + 2] = b;
 		}
 	}
-
 	int bytesPerRow = width * nChannels;
 	int x = 0, y = 0, i = 0, j = 0;
 	int intR = 0, intG = 0, intB = 0;
