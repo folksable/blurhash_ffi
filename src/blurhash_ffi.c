@@ -166,16 +166,16 @@ int decodeToInt(const char * string, int start, int end) {
 
 bool isValidBlurhash(const char * blurhash) {
 
-	const int hashLength = strlen(blurhash);
+	const size_t hashLength = strlen(blurhash);
 
-	if ( !blurhash || strlen(blurhash) < 6) return false;
+	if ( !blurhash || hashLength < 6) return 0;
 
 	int sizeFlag = decodeToInt(blurhash, 0, 1);	//Get size from first character
 	int numY = (int)floorf(sizeFlag / 9) + 1;
 	int numX = (sizeFlag % 9) + 1;
 
-	if (hashLength != 4 + 2 * numX * numY) return false;
-	return true;
+	if (hashLength != 4 + 2 * numX * numY) return 0;
+	return 1;
 }
 
 void decodeDC(int value, float * r, float * g, float * b) {
@@ -287,11 +287,5 @@ uint8_t * decode(const char * blurhash, int width, int height, int punch, int nC
 void freePixelArray(uint8_t * pixelArray) {
 	if (pixelArray) {
 		free(pixelArray);
-	}
-}
-
-void freeString(const char * string) {
-	if (string) {
-		free(string);
 	}
 }

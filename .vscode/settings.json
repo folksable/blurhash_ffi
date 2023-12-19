@@ -1,5 +1,8 @@
 {
-    "cmake.sourceDirectory": "/Users/dhikshithreddy/Developer/Folksable/blurhash/Dart/blurhash_ffi/src",
-    "editor.fontLigatures": true,
-    "editor.fontWeight": "normal"
+  "cmake.sourceDirectory": "/Users/dhikshithreddy/Developer/Folksable/blurhash/Dart/blurhash_ffi/src",
+  "editor.fontLigatures": true,
+  "editor.fontWeight": "normal",
+  "files.associations": {
+    "blurhash_ffi.h": "c"
+  }
 }
