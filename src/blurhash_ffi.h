@@ -33,7 +33,7 @@
 */
 
 FFI_PLUGIN_EXPORT
-const char *blurHashForPixels(int xComponents, int yComponents, int width, int height, uint8_t *rgb, size_t bytesPerRow);
+const char *blurHashForPixels(int xComponents, int yComponents, int width, int height, uint8_t *rgb, int64_t bytesPerRow);
 
 /*
 	decode : Returns the pixel array of the result image given the blurhash string,

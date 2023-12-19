@@ -21,31 +21,34 @@ static inline float signPow(float value, float exp) {
 }
 
 
-static float *multiplyBasisFunction(int xComponent, int yComponent, int width, int height, uint8_t *rgb, size_t bytesPerRow);
+static float *multiplyBasisFunction(int xComponent, int yComponent, int width, int height, uint8_t *rgb, int64_t bytesPerRow);
 static char *encode_int(int value, int length, char *destination);
 
 static int encodeDC(float r, float g, float b);
 static int encodeAC(float r, float g, float b, float maximumValue);
 
-const char *blurHashForPixels(int xComponents, int yComponents, int width, int height, uint8_t *rgb, size_t bytesPerRow) {
+const char *blurHashForPixels(int xComponents, int yComponents, int width, int height, uint8_t *rgb, int64_t bytesPerRow) {
 	static char buffer[2 + 4 + (9 * 9 - 1) * 2 + 1];
 
 	if(xComponents < 1 || xComponents > 9) return NULL;
 	if(yComponents < 1 || yComponents > 9) return NULL;
 
-	float factors[yComponents][xComponents][3];
-	memset(factors, 0, sizeof(factors));
+	float *factors = calloc(yComponents * xComponents * 3, sizeof(float));
+	if(factors == NULL) {
+		buffer[0] = '\0';
+		return buffer;
+	}
 
 	for(int y = 0; y < yComponents; y++) {
 		for(int x = 0; x < xComponents; x++) {
 			float *factor = multiplyBasisFunction(x, y, width, height, rgb, bytesPerRow);
-			factors[y][x][0] = factor[0];
-			factors[y][x][1] = factor[1];
-			factors[y][x][2] = factor[2];
+			factors[(y * xComponents + x) * 3 + 0] = factor[0];
+			factors[(y * xComponents + x) * 3 + 1] = factor[1];
+			factors[(y * xComponents + x) * 3 + 2] = factor[2];
 		}
 	}
 
-	float *dc = factors[0][0];
+	float *dc = &factors[0];
 	float *ac = dc + 3;
 	int acCount = xComponents * yComponents - 1;
 	char *ptr = buffer;
@@ -76,10 +79,12 @@ const char *blurHashForPixels(int xComponents, int yComponents, int width, int h
 
 	*ptr = 0;
 
+	free(factors);
+
 	return buffer;
 }
 
-static float *multiplyBasisFunction(int xComponent, int yComponent, int width, int height, uint8_t *rgb, size_t bytesPerRow) {
+static float *multiplyBasisFunction(int xComponent, int yComponent, int width, int height, uint8_t *rgb, int64_t bytesPerRow) {
 	float r = 0, g = 0, b = 0;
 	float normalisation = (xComponent == 0 && yComponent == 0) ? 1 : 2;
 
@@ -205,27 +210,33 @@ int decodeToArray(const char * blurhash, int width, int height, int punch, int n
 	float maxValue = ((float)(quantizedMaxValue + 1)) / 166;
 
 	int colors_size = numX * numY;
-	float colors[colors_size][3];
+	float *colors = malloc(colors_size * 3 * sizeof(float));
+	if(colors == NULL) return -1;
 
 	for(iter = 0; iter < colors_size; iter ++) {
 		if (iter == 0) {
 			int value = decodeToInt(blurhash, 2, 6);
-			if (value == -1) return -1;
+			if (value == -1) {
+				free(colors);
+				return -1;
+			}
 			decodeDC(value, &r, &g, &b);
-			colors[iter][0] = r;
-			colors[iter][1] = g;
-			colors[iter][2] = b;
+			colors[iter * 3 + 0] = r;
+			colors[iter * 3 + 1] = g;
+			colors[iter * 3 + 2] = b;
 
 		} else {
 			int value = decodeToInt(blurhash, 4 + iter * 2, 6 + iter * 2);
-			if (value == -1) return -1;
+			if (value == -1) {
+				free(colors);
+				return -1;
+			}
 			decodeAC(value, maxValue * punch, &r, &g, &b);
-			colors[iter][0] = r;
-			colors[iter][1] = g;
-			colors[iter][2] = b;
+			colors[iter * 3 + 0] = r;
+			colors[iter * 3 + 1] = g;
+			colors[iter * 3 + 2] = b;
 		}
 	}
-
 	int bytesPerRow = width * nChannels;
 	int x = 0, y = 0, i = 0, j = 0;
 	int intR = 0, intG = 0, intB = 0;
@@ -239,9 +250,9 @@ int decodeToArray(const char * blurhash, int width, int height, int punch, int n
 				for(i = 0; i < numX; i ++) {
 					float basics = cos((M_PI * x * i) / width) * cos((M_PI * y * j) / height);
 					int idx = i + j * numX;
-					r += colors[idx][0] * basics;
-					g += colors[idx][1] * basics;
-					b += colors[idx][2] * basics;
+					r += colors[idx * 3 + 0] * basics;
+					g += colors[idx * 3 + 1] * basics;
+					b += colors[idx * 3 + 2] * basics;
 				}
 			}
 
@@ -259,6 +270,8 @@ int decodeToArray(const char * blurhash, int width, int height, int punch, int n
 		}
 	}
 
+	free(colors);
+
 	return 0;
 }
 
@@ -274,5 +287,11 @@ uint8_t * decode(const char * blurhash, int width, int height, int punch, int nC
 void freePixelArray(uint8_t * pixelArray) {
 	if (pixelArray) {
 		free(pixelArray);
+	}
+}
+
+void freeString(const char * string) {
+	if (string) {
+		free(string);
 	}
 }
