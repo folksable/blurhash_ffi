@@ -55,3 +55,9 @@
 ## 1.2.1
   * fixed [#11](https://github.com/folksable/blurhash_ffi/issues/11)
   * format code
+
+## 1.2.2
+  * Thanks to @wh201906 for the initiative to add support for Windows.
+  * Thanks to @iliser for the PR to fix Memory Bugs on the Native Part.
+  * fixes [[#13](https://github.com/folksable/blurhash_ffi/issues/13)]
+  * Support for Windows
