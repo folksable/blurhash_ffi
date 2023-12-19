@@ -276,9 +276,3 @@ void freePixelArray(uint8_t * pixelArray) {
 		free(pixelArray);
 	}
 }
-
-void freeString(const char * string) {
-	if (string) {
-		free(string);
-	}
-}

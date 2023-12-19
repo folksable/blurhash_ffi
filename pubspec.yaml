@@ -5,7 +5,8 @@ description: >-
 version: 1.2.1
 repository: https://github.com/folksable/blurhash_ffi
 issue_tracker: https://github.com/folksable/blurhash_ffi/issues
-funding: https://github.com/sponsors/folksable
+funding: 
+  - https://github.com/sponsors/folksable
 
 environment:
   sdk: '>=3.0.6 <4.0.0'
