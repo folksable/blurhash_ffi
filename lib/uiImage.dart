@@ -24,9 +24,9 @@ class UiImage extends ImageProvider<UiImage> {
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(dynamic other) {
     if (other.runtimeType != runtimeType) return false;
-    final UiImage typedOther = (other as UiImage);
+    final UiImage typedOther = other;
     return image == typedOther.image && scale == typedOther.scale;
   }
 

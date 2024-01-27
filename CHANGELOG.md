@@ -1,4 +1,4 @@
-## [1.2.3](https://github.com/folksable/blurhash_ffi/tree/61c0256724b9fd637691b24a8ca8dfda5f54e779)
+## [1.2.3](https://github.com/folksable/blurhash_ffi/tree/3fafbaaca9898db37d25d4cb8f5b613f7716c2e8)
   * Fix changelog order
 
 ## [1.2.2](https://github.com/folksable/blurhash_ffi/tree/709e0c6ed1f6e9e96000adb2dae643e400fe76d4)
