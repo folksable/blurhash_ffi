@@ -1,3 +1,6 @@
+## 1.2.4
+  * dart version constraint to >=3.0.0 <4.0.0
+
 ## [1.2.3](https://github.com/folksable/blurhash_ffi/tree/3fafbaaca9898db37d25d4cb8f5b613f7716c2e8)
   * Fix changelog order
 
