@@ -1,10 +1,10 @@
 ## 1.2.4
   * dart version constraint to >=3.0.0 <4.0.0
 
-## [1.2.3](https://github.com/folksable/blurhash_ffi/tree/3fafbaaca9898db37d25d4cb8f5b613f7716c2e8)
+## 1.2.3
   * Fix changelog order
 
-## [1.2.2](https://github.com/folksable/blurhash_ffi/tree/709e0c6ed1f6e9e96000adb2dae643e400fe76d4)
+## 1.2.2
   * Thanks to [@wh201906](https://github.com/wh201906) for the initiative to add support for Windows.
   * Thanks to [@iliser](https://github.com/iliser) for the PR to fix Memory Bugs on the Native Part.
   * fixes [[#13](https://github.com/folksable/blurhash_ffi/issues/13)]
@@ -52,6 +52,9 @@
 ## 1.0.2
  * short description for pub.dev
 
+## 1.0.1
+ * making pubspec.yaml and readme.md clear, for better visibility on pub.dev
+
 ## 1.0.0
   ### Breaking Changes & Stable API (v1.0.0)
   * added a uniform API that's similar to both blurhash_dart and flutter_blurhash
@@ -61,8 +64,6 @@
   * added Logging support to help you debug your blurhashes.
   * this package now no longer depends on `image` package or other packages for the core logic, so you have everything in one place.
 
-## 1.0.1
- * making pubspec.yaml and readme.md clear, for better visibility on pub.dev
 
 ## 0.0.1
  * a minimum viable alternative to blurhash_dart and flutter_blurhash but faster.
