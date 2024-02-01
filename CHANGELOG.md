@@ -5,8 +5,8 @@
   * Fix changelog order
 
 ## [1.2.2](https://github.com/folksable/blurhash_ffi/tree/709e0c6ed1f6e9e96000adb2dae643e400fe76d4)
-  * Thanks to @wh201906 for the initiative to add support for Windows.
-  * Thanks to @iliser for the PR to fix Memory Bugs on the Native Part.
+  * Thanks to [@wh201906](https://github.com/wh201906) for the initiative to add support for Windows.
+  * Thanks to [@iliser](https://github.com/iliser) for the PR to fix Memory Bugs on the Native Part.
   * fixes [[#13](https://github.com/folksable/blurhash_ffi/issues/13)]
   * Support for Windows
 
