@@ -1,4 +1,4 @@
-// ignore_for_file: file_names, deprecated_member_use
+// ignore_for_file: file_names, deprecated_member_use, non_nullable_equals_parameter
 import 'package:flutter/cupertino.dart';
 import 'dart:ui' as ui;
 
