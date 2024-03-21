@@ -176,8 +176,8 @@ class BlurhashFFI {
       ImageProvider imageProvider) async {
     final completer = Completer<BlurHashImageInfo>();
     final listener = ImageStreamListener((imageInfo, _) async {
-      final ByteData? bytes = await imageInfo.image
-          .toByteData(format: ui.ImageByteFormat.rawRgba);
+      final ByteData? bytes =
+          await imageInfo.image.toByteData(format: ui.ImageByteFormat.rawRgba);
       if (bytes == null) {
         completer.completeError(BlurhashFFIException(
             'Could not decode Image from Image provider',
@@ -395,7 +395,7 @@ class BlurhashFFI {
         final stackTrace = StackTrace.current;
         throw BlurhashFFIException(
             'ERORR: ${Isolate.current.debugName}', stackTrace, e);
-      } 
+      }
     }
 
     final ReceivePort helperReceivePort = ReceivePort()..listen(onSend);
@@ -420,7 +420,7 @@ mixin Freeable {
   void free();
 }
 
-class _DecodeToArrayRequest with Freeable{
+class _DecodeToArrayRequest with Freeable {
   final int id;
   final String blurHash;
   final int width;
@@ -450,7 +450,7 @@ class _DecodeToArrayRequest with Freeable{
   }
 }
 
-class _DecodeRequest with Freeable{
+class _DecodeRequest with Freeable {
   final int id;
   final String blurHash;
   final int width;
@@ -469,6 +469,7 @@ class _DecodeRequest with Freeable{
     }
     return _bhptr!.cast<Char>();
   }
+
   @override
   void free() {
     if (_bhptr != null) {
@@ -478,7 +479,7 @@ class _DecodeRequest with Freeable{
   }
 }
 
-class _EncodeRequest with Freeable{
+class _EncodeRequest with Freeable {
   final int id;
   final Uint8List pixels;
   final int width;

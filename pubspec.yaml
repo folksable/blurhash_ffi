@@ -2,7 +2,7 @@ name: blurhash_ffi
 description: >-
   A compact, fast and easy to use blurry image placeholder generator for Flutter
   using native ffi bindings. 
-version: 1.2.5
+version: 1.2.6
 repository: https://github.com/folksable/blurhash_ffi
 issue_tracker: https://github.com/folksable/blurhash_ffi/issues
 funding: 

@@ -1,3 +1,6 @@
+## 1.2.6
+  * Fixed formatting for no analysis issues.
+   
 ## 1.2.5
   * Encoding will be faster now due to removing RGBA to RGB conversion in dart.
   * Update screenshots.
