@@ -39,9 +39,9 @@ class _MyAppState extends State<MyApp> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [1, 2, 3].map<Widget>((e) {
-                    var assetName = e == 2
-                        ? 'assets/images/$e.png'
-                        : 'assets/images/$e.jpg';
+                    var assetName = e == 1
+                        ? 'assets/images/$e.jpg'
+                        : 'assets/images/$e.png';
                     return MaterialButton(
                       padding: EdgeInsets.zero,
                       onPressed: () async {
@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
                     child: FutureBuilder(
                       future: blurHashResult,
                       builder: (context, snapshot) => snapshot.hasData
-                          ? Text('mbh: ${snapshot.data}')
+                          ? Text('blurhash: ${snapshot.data}')
                           : const CircularProgressIndicator(),
                     ),
                   ),
