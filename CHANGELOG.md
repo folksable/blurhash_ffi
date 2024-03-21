@@ -1,3 +1,7 @@
+## 1.2.5
+  * Encoding will be faster now due to removing RGBA to RGB conversion in dart.
+  * Update screenshots.
+
 ## 1.2.4
   * dart version constraint to >=3.0.0 <4.0.0
 
@@ -23,7 +27,6 @@
 ## 1.1.2
   * replace colored container while loading blurhash with `AnimatedContainer`
   * format code
-
 
 ## 1.1.1
   * modify readme.md to explain how to use `BlurhashTheImage` widget
