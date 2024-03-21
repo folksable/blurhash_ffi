@@ -34,7 +34,7 @@ class BlurhashFfiBindings {
   /// `yComponents` - The number of components in the Y direction. Must be between 1 and 9. 3 to 5 is usually a good range for this.
   /// `width` - The width in pixels of the supplied image.
   /// `height` - The height in pixels of the supplied image.
-  /// `rgb` - A pointer to the pixel data. This is supplied in RGB order, with 3 bytes per pixels.
+  /// `rgb` - A pointer to the pixel data. This is supplied in RGBA format, with 4 bytes per pixels.
   /// `bytesPerRow` - The number of bytes per row of the RGB pixel data.
   ffi.Pointer<ffi.Char> blurHashForPixels(
     int xComponents,
@@ -166,22 +166,4 @@ class BlurhashFfiBindings {
           'freePixelArray');
   late final _freePixelArray =
       _freePixelArrayPtr.asFunction<void Function(ffi.Pointer<ffi.Uint8>)>();
-
-  /// freeBlurhash : Frees the blurhash string
-  /// Parameters :
-  /// blurhash : Blurhash string pointer which will be freed.
-  /// Returns : void (None)
-  void freeString(
-    ffi.Pointer<ffi.Char> blurhash,
-  ) {
-    return _freeString(
-      blurhash,
-    );
-  }
-
-  late final _freeStringPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Char>)>>(
-          'freeString');
-  late final _freeString =
-      _freeStringPtr.asFunction<void Function(ffi.Pointer<ffi.Char>)>();
 }

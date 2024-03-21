@@ -176,8 +176,8 @@ class BlurhashFFI {
       ImageProvider imageProvider) async {
     final completer = Completer<BlurHashImageInfo>();
     final listener = ImageStreamListener((imageInfo, _) async {
-      final ByteData? bytes =
-          await imageInfo.image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      final ByteData? bytes = await imageInfo.image
+          .toByteData(format: ui.ImageByteFormat.rawRgba);
       if (bytes == null) {
         completer.completeError(BlurhashFFIException(
             'Could not decode Image from Image provider',
@@ -186,15 +186,10 @@ class BlurhashFFI {
         return;
       }
       final Uint8List list = bytes.buffer.asUint8List();
-      final rgbBytes = Uint8List(list.length ~/ 4 * 3);
-      for (var i = 0, j = 0; i < list.length; i += 4, j += 3) {
-        rgbBytes[j] = list[i];
-        rgbBytes[j + 1] = list[i + 1];
-        rgbBytes[j + 2] = list[i + 2];
-      }
+
       if (!completer.isCompleted) {
         completer.complete(BlurHashImageInfo(imageInfo.image.height,
-            imageInfo.image.width, imageInfo.image.width * 3, rgbBytes));
+            imageInfo.image.width, imageInfo.image.width * 4, list));
       }
     }, onError: (dynamic exception, StackTrace? stackTrace) {
       completer.completeError(exception, stackTrace);
@@ -356,7 +351,6 @@ class BlurhashFFI {
             data.pixelsPointer,
             data.rowStride,
           );
-          data.free();
           final String resultString = result.cast<Utf8>().toDartString();
           final _EncodeResponse response =
               _EncodeResponse(data.id, resultString);
@@ -365,7 +359,6 @@ class BlurhashFFI {
         } else if (data is _DecodeRequest) {
           final Pointer<Uint8> result = _bindings.decode(data.blurHashPointer,
               data.width, data.height, data.punch, data.channels);
-          data.free();
           final Uint8List resultImage = result.asTypedList(
             data.width * data.height * data.channels,
             // preffer way but works only from dart 3.1.0, and requre to change generated bindings
@@ -402,7 +395,7 @@ class BlurhashFFI {
         final stackTrace = StackTrace.current;
         throw BlurhashFFIException(
             'ERORR: ${Isolate.current.debugName}', stackTrace, e);
-      }
+      } 
     }
 
     final ReceivePort helperReceivePort = ReceivePort()..listen(onSend);
@@ -423,7 +416,11 @@ class BlurhashFFIException extends Error {
       [this.level = Level.SEVERE]);
 }
 
-class _DecodeToArrayRequest {
+mixin Freeable {
+  void free();
+}
+
+class _DecodeToArrayRequest with Freeable{
   final int id;
   final String blurHash;
   final int width;
@@ -444,6 +441,7 @@ class _DecodeToArrayRequest {
     return _bhptr!.cast<Char>();
   }
 
+  @override
   void free() {
     if (_bhptr != null) {
       malloc.free(_bhptr!);
@@ -452,7 +450,7 @@ class _DecodeToArrayRequest {
   }
 }
 
-class _DecodeRequest {
+class _DecodeRequest with Freeable{
   final int id;
   final String blurHash;
   final int width;
@@ -471,7 +469,7 @@ class _DecodeRequest {
     }
     return _bhptr!.cast<Char>();
   }
-
+  @override
   void free() {
     if (_bhptr != null) {
       malloc.free(_bhptr!);
@@ -480,7 +478,7 @@ class _DecodeRequest {
   }
 }
 
-class _EncodeRequest {
+class _EncodeRequest with Freeable{
   final int id;
   final Uint8List pixels;
   final int width;
@@ -501,6 +499,7 @@ class _EncodeRequest {
     return pixelsPtr!;
   }
 
+  @override
   void free() {
     if (pixelsPtr != null) {
       calloc.free(pixelsPtr!);
