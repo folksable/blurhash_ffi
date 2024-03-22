@@ -90,7 +90,7 @@ static float *multiplyBasisFunction(int xComponent, int yComponent, int width, i
 	float r = 0, g = 0, b = 0;
 	float normalisation = (xComponent == 0 && yComponent == 0) ? 1 : 2;
 
-	int channels = (int)bytesPerRow / width;
+	size_t channels = bytesPerRow / width;
 
 	for(int y = 0; y < height; y++) {
 		for(int x = 0; x < width; x++) {
