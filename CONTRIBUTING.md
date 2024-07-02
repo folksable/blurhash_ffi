@@ -1,10 +1,10 @@
 ## Contributing to Blurhash FFI
 
-- this project is an implementation of blurhash algorithm in C via dart:ffi
-- the goal of the project is to provide fastest encoding and decoding of blurhash for flutter
+- this project is an implementation of the blurhash algorithm in C via dart:ffi
+- the goal of the project is to provide the fastest encoding and decoding of blurhash for flutter, and also be easy to use
 
 ## Setting up environment
-### Preqrequisites
+### Prerequisites
 - Linux, Mac OS X, or Windows
 
 - git (used for source version control)
