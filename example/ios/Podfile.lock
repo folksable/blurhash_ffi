@@ -1,0 +1,22 @@
+PODS:
+  - blurhash_ffi (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - blurhash_ffi (from `.symlinks/plugins/blurhash_ffi/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  blurhash_ffi:
+    :path: ".symlinks/plugins/blurhash_ffi/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  blurhash_ffi: 4831b96320d4273876c9a2fd3f7d50b8a3a53509
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+
+PODFILE CHECKSUM: 819463e6a0290f5a72f145ba7cde16e8b6ef0796
+
+COCOAPODS: 1.16.2
