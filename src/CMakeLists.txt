@@ -17,3 +17,8 @@ set_target_properties(blurhash_ffi PROPERTIES
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g")
 
 target_compile_definitions(blurhash_ffi PUBLIC DART_SHARED_LIB)
+
+if (ANDROID)
+  # Support Android 15 16k page size.
+  target_link_options(blurhash_ffi PRIVATE "-Wl,-z,max-page-size=16384")
+endif()
