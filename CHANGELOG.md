@@ -1,3 +1,7 @@
+## 1.2.7
+  * Fixed Android 15 shared object page size compatibility issue.
+  * Updated example to work with the latest flutter version.
+  
 ## 1.2.6
   * Fixed formatting for no analysis issues.
    
